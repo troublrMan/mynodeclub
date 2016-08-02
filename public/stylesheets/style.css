@@ -1,0 +1,51 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+a {
+    color: #08c;
+    text-decoration: none;
+}
+
+.navbar {
+    margin-bottom: 0;
+    z-index: 9;
+    width: 100%;
+    position: relative;
+    background: #444;
+    font-size: 13px;
+}
+
+.navbar-inner {
+    height: 50px;
+}
+
+.container {
+    height: 30px;
+    padding: 10px 0;
+}
+
+.brand {
+    display: inherit;
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+
+.navbar-search {
+    float: left;
+    margin-right: 20%;
+}
+
+.navbar .nav>li {
+    float: left;
+    list-style-type: none;
+    margin: 0 15px;
+}
+
+.navbar .nav>li a{
+    margin: 0 15px;
+    font-size: 16px;
+    color: white;
+}

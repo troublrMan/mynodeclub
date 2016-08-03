@@ -1,6 +1,7 @@
 var mongoose  = require('mongoose');
 var BaseModel = require("./base_model");
 var Schema    = mongoose.Schema;
+var ObjectId  = Schema.ObjectId;
 var config    = require('../config');
 
 var TopicSchema = new Schema({
@@ -21,3 +22,7 @@ var TopicSchema = new Schema({
     tab: {type: String},
     deleted: {type: Boolean, default: false},
 });
+
+TopicSchema.plugin(BaseModel);
+
+module.exports = TopicSchema;

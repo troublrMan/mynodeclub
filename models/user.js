@@ -1,4 +1,5 @@
 var mongoose  = require('mongoose');
+var BaseModel = require("./base_model");
 var Schema    = mongoose.Schema;
 
 var UserSchema = new Schema({
@@ -40,3 +41,9 @@ var UserSchema = new Schema({
 
     accessToken: {type: String},
 });
+
+//添加预包装功能来扩展其功能
+UserSchema.plugin(BaseModel);
+
+//通过 mogoose model注入模块，直接通过 mongoose.model('User') 可以引用到
+mongoose.model('User', UserSchema);

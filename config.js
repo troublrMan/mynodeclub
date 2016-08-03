@@ -15,4 +15,7 @@ var config = {
         ['ask', '问答'],
         ['job', '招聘'],
     ],
+    session_secret: 'my_node_club_secret',
 }
+
+module.exports = config;

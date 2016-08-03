@@ -27,10 +27,10 @@ exports.put = function(req, res, next) {
     if (editError) {
         res.status(422);
         return res.render('topic/edit', {
-        edit_error: editError,
-        title: title,
-        content: content,
-        tabs: config.tabs
+            edit_error: editError,
+            title: title,
+            content: content,
+            tabs: config.tabs
         });
     }
     
@@ -57,3 +57,10 @@ exports.create = function(req, res, next) {
         tabs: config.tabs
     });
 };
+
+exports.index = function(req, res, next) {
+    var id = req.query._id;
+    res.render('topic/index', {
+        
+    });
+}

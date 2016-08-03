@@ -1,7 +1,7 @@
 
 var config = {
     // mongodb 配置
-    db: 'mongodb://127.0.0.1/node_club_dev',
+    db: 'mongodb://127.0.0.1/my_node_club',
     
     // redis 配置，默认是本地
     redis_host: '127.0.0.1',
@@ -16,6 +16,7 @@ var config = {
         ['job', '招聘'],
     ],
     session_secret: 'my_node_club_secret',
+    name: 'MyNodeclub',    //社区名称
 }
 
 module.exports = config;

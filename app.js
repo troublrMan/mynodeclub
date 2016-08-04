@@ -3,6 +3,7 @@ var path = require('path');
 var webRouter = require('./web_router');
 var config = require('./config');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 
@@ -20,6 +21,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //如果不用 bodyParser, post提交的数据在 req.body 中将会取不到
 app.use(bodyParser.urlencoded({ extended: false }));
+
+//添加 cookie 中间件
+app.use(cookieParser(config.session_secret));
+
 //添加 session 中间件
 app.use(session({
     secret: config.session_secret,

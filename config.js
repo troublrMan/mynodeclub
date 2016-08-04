@@ -15,7 +15,8 @@ var config = {
         ['ask', '问答'],
         ['job', '招聘'],
     ],
-    session_secret: 'my_node_club_secret',
+    session_secret: 'my_node_club',
+    auth_cookie_name: 'my_node_club',
     name: 'MyNodeclub',    //社区名称
 }
 

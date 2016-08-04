@@ -3,6 +3,7 @@ var eventproxy = require('eventproxy');
 var config = require('../config');
 var User = require('../proxy').User;
 var tools = require('../common/tools');
+var authMiddleWare = require('../middlewares/auth');
 
 /**
  * 登录页
@@ -11,6 +12,75 @@ exports.showLogin = function(req, res, next) {
     // req.session._loginReferer = req.headers.referer;
     res.render('sign/signin');
 };
+
+/**
+ * 登录时需要跳到首页的页面
+ * @type {Array}
+ */
+var notJump = [
+    '/active_account', 
+    '/reset_pass',     
+    '/signup',         
+    '/search_pass'    
+];
+
+/**
+ * 登录逻辑验证
+ */
+exports.login = function(req, res, next) {
+    var loginName = validator.trim(req.body.name).toLowerCase();
+    var pass = validator.trim(req.body.pass).toLowerCase();
+    var ep = new eventproxy();
+    
+    ep.fail(next);
+    ep.on('login_error', function(login_error) {
+        res.status(403);
+        res.render('sign/signin', { error: '用户名或密码错误'});
+    })
+    
+    if(!loginName || !pass) {
+        res.status(422);
+        return res.render('sign/signin', { error: '信息不完整'});
+    }
+    
+    //根据用户名或邮箱获取用户
+    var getUser;
+    if(loginName.indexOf('@') !== -1) {
+        getUser = User.getUserByMail;
+    } else {
+        getUser = User.getUserByLoginName;
+    }
+    
+    getUser(loginName, function(err, user) {
+        if(err) return next(err);
+        if(!user) {
+            return ep.emit('login_error');
+        }
+        
+        //验证密码
+        var passhash = user.pass;
+        tools.bcompare(pass, passhash, ep.done(function(bool) {
+            if(!bool) return ep.emit('login_error');
+            
+            //账号未激活，应该提示用户去激活
+            if(!user.active) {
+                console.log('该用户未激活');
+            }
+            
+            //保存 session、cookie
+            authMiddleWare.gen_session(user, req, res);
+            //登录成功后的跳转地址
+            var refer = (req.session && req.session._loginReferer) || '/';
+            if(notJump.some(function(item) {
+                return refer.indexOf(item) >= 0;
+            })) {
+                refer = '/';
+            }
+            
+            res.redirect(refer);
+        }));
+    });
+}
 
 /**
  * 注册显示页面

@@ -27,4 +27,18 @@ exports.newAndSave = function(name, loginname, pass, email, avatar_url, active, 
     user.active = active || false;
     // user.accessToken = uuid.V4();   不明所以先注掉
     user.save(callback);
-}
+};
+
+/**
+ * 根据邮箱获取用户
+ */
+exports.getUserByMail = function(email, callback) {
+    User.findOne({'email': email}, callback);
+};
+
+/**
+ * 根据登录名获取用户
+ */
+exports.getUserByLoginName = function(loginName, callback) {
+    User.findOne({'loginname': new RegExp('^' + loginName + '$', 'i')}, callback);
+};

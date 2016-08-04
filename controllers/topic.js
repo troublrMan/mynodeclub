@@ -1,6 +1,7 @@
 var Topic = require('../proxy').Topic;
 var config = require('../config');
 var EventProxy = require('eventproxy');
+var User = require('../proxy').User;
 
 exports.put = function(req, res, next) {
     var title = req.body.title;
@@ -33,8 +34,7 @@ exports.put = function(req, res, next) {
             tabs: config.tabs
         });
     }
-    
-    //暂时没加用户验证
+  
     var sessionId = req.session ? req.session.user._id : null;
     
     Topic.newAndSave(title, content, tab, sessionId, function (err, topic) {
@@ -42,13 +42,16 @@ exports.put = function(req, res, next) {
             return next(err);
         }
         
-        var proxy = new EventProxy();
+        var ep = new EventProxy();
         
-        proxy.all('score_saved', function() {
+        ep.all('score_saved', function() {
             res.redirect('/topic/' + topic._id);
         });
+        ep.fail(next);
         
-        proxy.fail(next);
+        User.getUserById(req.session.user._id, ep.done(function(user) {
+            
+        }));
     });
 };
 
